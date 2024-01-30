@@ -7,6 +7,8 @@ import (
 	"os"
 
 	"github.com/aboronilov/go-chi-rest-api/db"
+	"github.com/aboronilov/go-chi-rest-api/router"
+	"github.com/aboronilov/go-chi-rest-api/services"
 	"github.com/joho/godotenv"
 )
 
@@ -16,15 +18,15 @@ type Config struct {
 
 type Application struct {
 	Config Config
-	// Models
+	Models services.Models
 }
 
 func (app *Application) Serve() error {
 	fmt.Printf("API is running on port %s", app.Config.Port)
 
 	srv := &http.Server{
-		Addr: fmt.Sprintf(":%s", app.Config.Port),
-		// TODO: add router
+		Addr:    fmt.Sprintf(":%s", app.Config.Port),
+		Handler: router.Routes(),
 	}
 
 	return srv.ListenAndServe()
@@ -40,7 +42,6 @@ func main() {
 		Port: os.Getenv("PORT"),
 	}
 
-	// TODO: connect to DB
 	host := os.Getenv("HOST")
 	port := os.Getenv("DB_PORT")
 	user := os.Getenv("USER")
@@ -60,7 +61,7 @@ func main() {
 
 	app := &Application{
 		Config: cfg,
-		// TODO: models
+		Models: services.New(dbConn.DB),
 	}
 
 	err = app.Serve()
