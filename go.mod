@@ -3,6 +3,7 @@ module github.com/aboronilov/go-chi-rest-api
 go 1.20
 
 require (
+	github.com/go-chi/chi/v5 v5.0.11
 	github.com/jackc/pgconn v1.14.1
 	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/jackc/pgx/v4 v4.18.1
